@@ -38,6 +38,7 @@ data/raw/*
 data/clean/*
 data/geo/*
 !data/**/.gitkeep
+registros.txt
 
 # ML artifacts
 ml/artifacts/*
