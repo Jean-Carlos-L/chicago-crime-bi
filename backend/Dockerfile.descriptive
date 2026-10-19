@@ -1,0 +1,12 @@
+# backend/Dockerfile.descriptive
+FROM public.ecr.aws/lambda/python:3.12
+
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+COPY pyproject.toml uv.lock ./
+
+RUN uv export --only-group backend-descriptive --no-hashes --no-emit-project -o req.txt \
+   && uv pip install --system -r req.txt
+
+COPY backend/app ${LAMBDA_TASK_ROOT}/app
+
+CMD ["app.descriptive_main.handler"]
