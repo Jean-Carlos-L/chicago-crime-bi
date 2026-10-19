@@ -1,0 +1,53 @@
+[project]
+name = "chicago-crime-bi"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Jean Carlos Lerma Rojas", email = "yancalerma@gmail.com" }
+]
+requires-python = ">=3.12"
+dependencies = []
+
+[tool.uv]
+package = false
+
+[dependency-groups]
+backend-common = [
+    "boto3>=1.43.114",
+    "fastapi>=0.148.0",
+    "mangum>=0.22.0",
+    "pydantic>=2.14.1",
+]
+dev = [
+    "ipykernel>=7.4.0",
+    "jupyter>=1.1.1",
+    "matplotlib>=3.11.2",
+    "plotly>=7.1.0",
+    "pytest>=9.1.1",
+    "ruff>=0.17.1",
+    "seaborn>=0.13.2",
+]
+etl = [
+    "boto3>=1.43.114",
+    "pandas>=3.0.6",
+    "pyarrow>=26.0.0",
+    "python-dotenv>=1.2.4",
+    "requests>=2.34.2",
+]
+infra = [
+    "aws-cdk-lib>=2.273.0",
+    "constructs>=10.8.1",
+]
+ml = [
+    "joblib>=1.6.0",
+    "pandas>=3.0.6",
+    "pyarrow>=26.0.0",
+    "scikit-learn>=1.9.1",
+    "statsmodels>=0.15.0",
+]
+backend-descriptive = [{include-group = "backend-common"}]
+backend-predictive  = [
+    {include-group = "backend-common"},
+    "pandas", "scikit-learn", "joblib",
+]

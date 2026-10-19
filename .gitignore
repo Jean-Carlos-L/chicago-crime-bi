@@ -1,0 +1,63 @@
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+venv/
+env/
+
+# Testing / tooling caches
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# AWS CDK
+cdk.out/
+.cdk.staging/
+
+# Data (keep the folder structure, not the data itself)
+data/raw/*
+data/clean/*
+data/geo/*
+!data/**/.gitkeep
+
+# ML artifacts
+ml/artifacts/*
+ml/arrest_classifier/*
+ml/forecast/*
+!ml/**/.gitkeep
+
+# Frontend (Node)
+node_modules/
+frontend/dist/
+frontend/build/
+.vite/
+.next/
+.nuxt/
+*.tsbuildinfo
+npm-debug.log*
+yarn-error.log*
+
+# OS / editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
