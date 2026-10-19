@@ -1,0 +1,1 @@
+Duplicados por case_number: 179 registros comparten número de caso con otro registro. Se verificó que son homicidios con múltiples víctimas (una fila por víctima, mismo tipo, mismo bloque, distinto id y hora). Se conservan. La deduplicación se hace solo por id. case_number se mantiene como dimensión degenerada en fact_crime.
