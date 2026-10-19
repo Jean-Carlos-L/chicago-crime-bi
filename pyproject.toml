@@ -11,6 +11,7 @@ dependencies = []
 
 [tool.uv]
 package = false
+default-groups = "all"
 
 [dependency-groups]
 backend-common = [
@@ -30,6 +31,7 @@ dev = [
 ]
 etl = [
     "boto3>=1.43.114",
+    "holidays>=0.106",
     "pandas>=3.0.6",
     "pyarrow>=26.0.0",
     "python-dotenv>=1.2.4",
