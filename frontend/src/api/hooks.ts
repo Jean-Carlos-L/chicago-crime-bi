@@ -1,7 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import { get } from "./client";
 import { useFilters } from "../context/useFilters";
-import type { Summary, TimeseriesRow, HeatmapRow, CrimeTypeRow, ZoneRow, CommunityGeoJson, PointRow } from "../types/api";
+import type { Summary, TimeseriesRow, HeatmapRow, CrimeTypeRow, ZoneRow, CommunityGeoJson, PointRow, TypeSeries, TrendsResponse, TrendMetrics } from "../types/api";
+
+const PREDICT = import.meta.env.VITE_PREDICT_API_URL;
 
 function useApi<T>(key: string, path: string, extra: Record<string, string | number> = {}) {
    const { filters } = useFilters();
@@ -57,3 +59,21 @@ export const useCommunityGeo = () =>
    });
 
 export const useMapPoints = () => useApi<PointRow[]>("map-points", "/analytics/map/points");
+
+export const useTrends = () =>
+   useQuery<TrendsResponse>({
+      queryKey: ["trends"], staleTime: Infinity,
+      queryFn: () => get<TrendsResponse>("/predict/trends", {}, PREDICT),
+   });
+
+export const useTypeSeries = (primaryType: string) =>
+   useQuery<TypeSeries>({
+      queryKey: ["type-series", primaryType], staleTime: Infinity,
+      queryFn: () => get<TypeSeries>(`/predict/series/${encodeURIComponent(primaryType)}`, {}, PREDICT),
+   });
+
+export const useTrendMetrics = () =>
+   useQuery<TrendMetrics>({
+      queryKey: ["trend-metrics"], staleTime: Infinity,
+      queryFn: () => get<TrendMetrics>("/predict/metrics", {}, PREDICT),
+   });

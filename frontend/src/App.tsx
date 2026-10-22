@@ -8,12 +8,14 @@ import CrimeTypes from "./pages/CrimeTypes";
 import Geographic from "./pages/Geographic";
 import Overview from "./pages/Overview";
 import Temporal from "./pages/Temporal";
+import Predictions from "./pages/Predictions";
 
 const TABS = [
    { id: "resumen", label: "Resumen" },
    { id: "tipos", label: "Tipos de delito" },
    { id: "temporal", label: "Análisis temporal" },
    { id: "geografico", label: "Geográfico" },
+   { id: "predicciones", label: "Predicciones" },
    { id: "metodologia", label: "Metodología" },
 ] as const;
 
@@ -36,8 +38,11 @@ function Page({ id }: { id: TabId }) {
          return <Temporal />;
       case "geografico":
          return <Geographic />;
+      case "predicciones":
+         return <Predictions />;
       case "metodologia":
          return <About />;
+
    }
 }
 
@@ -157,11 +162,10 @@ export default function App() {
                            aria-controls={`panel-${item.id}`}
                            tabIndex={active ? 0 : -1}
                            onClick={() => selectTab(item.id)}
-                           className={`-mb-px whitespace-nowrap border-b-2 px-3.5 py-2.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg ${
-                              active
+                           className={`-mb-px whitespace-nowrap border-b-2 px-3.5 py-2.5 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-bg ${active
                                  ? "border-primary font-semibold text-primary-soft"
                                  : "border-transparent text-muted hover:border-border hover:text-text"
-                           }`}
+                              }`}
                         >
                            {item.label}
                         </button>

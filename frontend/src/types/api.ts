@@ -95,3 +95,39 @@ export interface PointRow {
    lon: number;
    total: number;
 }
+
+export interface TrendRow {
+   primary_type: string;
+   next_q: number;
+   last_q: number;
+   year_ago_q: number;
+   variation_pct: number;
+   variation_lo_pct: number;
+   variation_hi_pct: number;
+   vs_year_ago_pct: number;
+   trend: "UP" | "DOWN" | "STABLE";
+   clear: boolean;
+   avg_monthly: number;
+}
+
+export interface TrendsResponse {
+   last_month: string;
+   horizon: number;
+   stable_threshold_pct: number;
+   table: TrendRow[];
+   excluded: string[];
+}
+
+export interface TypeSeries {
+   history: { month: string; total: number }[];
+   forecast: { month: string; forecast: number; lo: number; hi: number }[];
+}
+
+export interface TrendMetrics {
+   origins: number;
+   samples: number;
+   direction_acc_pct: Record<string, number>;
+   variation_mae_pp: Record<string, number>;
+   quarter_wape_pct: Record<string, number>;
+   interval80_in_sample_coverage_pct: number;
+}
