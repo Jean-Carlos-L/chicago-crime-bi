@@ -3,7 +3,7 @@ import pandas as pd
 
 from etl.clean import CLEAN_FILE
 from etl.config import DATA_CLEAN
-from etl.reference import COMMUNITY_AREAS
+from etl.reference import (COMMUNITY_AREAS, CRIME_GROUP, PROPERTY_TYPES, WEAPON_ELIGIBLE, WEAPON_REGEX)
 
 STAR_DIR = DATA_CLEAN / "star"
 LOC_COLS = ["beat", "district", "ward", "community_area"]
@@ -58,6 +58,12 @@ def transform(df: pd.DataFrame) -> dict[str, pd.DataFrame]:
         dim_location["community_area"].map(COMMUNITY_AREAS).fillna("UNKNOWN")
     )
     dim_crime_type = make_dim(df, TYPE_COLS, "crime_type_key")
+    dim_crime_type["crime_group"] = dim_crime_type["primary_type"].map(CRIME_GROUP).fillna("OTHER")
+    dim_crime_type["is_property"] = dim_crime_type["primary_type"].isin(PROPERTY_TYPES)
+    dim_crime_type["weapon_involved"] = (
+        dim_crime_type["primary_type"].isin(WEAPON_ELIGIBLE)
+        & dim_crime_type["description"].str.contains(WEAPON_REGEX, regex=True).fillna(False)
+    ).astype(bool)
     dim_loc_desc = make_dim(df, ["location_description"], "loc_desc_key")
     dim_date = build_dim_date(df["date"].min(), df["date"].max())
     dim_time = build_dim_time()

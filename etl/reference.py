@@ -18,3 +18,17 @@ COMMUNITY_AREAS = {
     for i, name in enumerate(_NAMES.replace("\n", "").split("|"), start=1)
 }
 assert len(COMMUNITY_AREAS) == 77
+
+VIOLENT = {"ROBBERY", "ASSAULT", "BATTERY", "HOMICIDE", "CRIMINAL SEXUAL ASSAULT", "KIDNAPPING"}
+NON_VIOLENT = {"THEFT", "BURGLARY", "NARCOTICS", "MOTOR VEHICLE THEFT", "CRIMINAL DAMAGE", "DECEPTIVE PRACTICE", "CRIMINAL TRESPASS"}
+
+
+CRIME_GROUP = {**{t: "VIOLENT" for t in VIOLENT}, **{t: "NON_VIOLENT" for t in NON_VIOLENT}}
+
+# Delitos contra la propiedad. CRIMINAL DAMAGE por definición daña bienes;
+PROPERTY_TYPES = {"THEFT", "BURGLARY", "MOTOR VEHICLE THEFT", "CRIMINAL DAMAGE", "ARSON"}
+
+# Armas: el dataset NO tiene una columna de armas. Se infiere del texto de `description`
+# y solo para robos y agresiones.
+WEAPON_ELIGIBLE = {"ROBBERY", "ASSAULT", "BATTERY"}
+WEAPON_REGEX = r"HANDGUN|FIREARM|KNIFE|CUTTING|DANG|^ARMED"

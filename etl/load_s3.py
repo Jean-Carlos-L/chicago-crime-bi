@@ -12,7 +12,9 @@ COLUMNS = {
     "dim_time": ["time_key", "hour", "part_of_day"],
     "dim_location": ["location_key", "beat", "district", "ward", "community_area",
                      "community_area_name"],
-    "dim_crime_type": ["crime_type_key", "iucr", "primary_type", "description", "fbi_code"],
+    "dim_crime_type": ["crime_type_key", "iucr", "primary_type", "description", "fbi_code",
+                   "crime_group", "is_property", "weapon_involved"],
+    "ref_community_population": ["community_area", "population", "source_year"],
     "dim_location_description": ["loc_desc_key", "location_description"],
     "fact_crime": ["crime_id", "case_number", "date_key", "time_key", "location_key",
                    "crime_type_key", "loc_desc_key", "arrest", "domestic", "block",
@@ -22,7 +24,7 @@ COLUMNS = {
 INT32_COLS = {
     "date_key", "year", "quarter", "month", "week_of_year", "day_of_week",
     "time_key", "hour", "location_key", "district", "ward", "community_area",
-    "crime_type_key", "loc_desc_key",
+    "crime_type_key", "loc_desc_key", "population", "source_year",
 }
 # crime_id es BIGINT (int64) y los timestamps se escriben en microsegundos
 

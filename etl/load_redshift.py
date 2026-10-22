@@ -11,7 +11,7 @@ from etl.transform import STAR_DIR
 
 # Dimensiones primero, hechos al final
 LOAD_ORDER = ["dim_date", "dim_time", "dim_location", "dim_crime_type",
-              "dim_location_description", "fact_crime"]
+              "dim_location_description", "fact_crime", "ref_community_population"]
 
 session = boto3.Session(profile_name=AWS_PROFILE, region_name=AWS_REGION)
 client = session.client("redshift-data")

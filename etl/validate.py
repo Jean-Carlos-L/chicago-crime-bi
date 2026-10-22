@@ -34,14 +34,3 @@ def validate() -> None:
 
 if __name__ == "__main__":
     validate()
-    import pyarrow.parquet as pq
-    import pyarrow.fs as fs
-
-    bucket = "chicagocrimedatastack-databuckete3889a50-prjainxi3tcm"
-    key = "clean/fact_crime/fact_crime.parquet"
-
-    s3 = fs.S3FileSystem(region="us-east-1")
-
-    table = pq.read_table(f"{bucket}/{key}", filesystem=s3)
-
-    print(table.schema)
