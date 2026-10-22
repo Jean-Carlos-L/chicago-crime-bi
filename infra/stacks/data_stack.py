@@ -70,3 +70,4 @@ class DataStack(cdk.Stack):
         cdk.CfnOutput(self, "RedshiftRoleArn", value=redshift_role.role_arn)
         cdk.CfnOutput(self, "WorkgroupName", value=WORKGROUP_NAME)
         cdk.CfnOutput(self, "DatabaseName", value=DB_NAME)
+        self.workgroup_arn = workgroup.attr_workgroup_workgroup_arn

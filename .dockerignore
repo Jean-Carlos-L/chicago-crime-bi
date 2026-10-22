@@ -1,0 +1,11 @@
+.git
+.venv
+data
+notebooks
+frontend
+infra
+docs
+**/__pycache__
+**/node_modules
+ml/artifacts/*.joblib
+.env
