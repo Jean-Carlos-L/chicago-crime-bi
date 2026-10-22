@@ -86,9 +86,12 @@ redshift-check: ## Prueba de conectividad: SELECT 1 vía Data API
 	sleep 3; aws redshift-data describe-statement --id $$ID --query Status --output text
 
 # --------------------------------------------------------------- Desarrollo
-.PHONY: api web web-build typecheck test lint
-api: ## API descriptiva en local (http://localhost:8000/docs)
+.PHONY: api-descriptive api-predict web web-build typecheck test lint
+api-descriptive: ## API descriptiva en local (http://localhost:8000/docs)
 	uv run uvicorn backend.app.descriptive_main:app --reload
+
+api-predict: ## API predictiva en local (puerto 8001)
+	uv run uvicorn backend.app.predictive_main:app --reload --port 8001
 
 web: ## Frontend en local (http://localhost:5173)
 	cd frontend && npm run dev
@@ -105,16 +108,22 @@ test: ## Pruebas de Python
 lint: ## Linter de Python
 	uv run ruff check .
 
-# ----------------------------------------------------------------------------
-# PENDIENTE: requiere backend_stack.py, frontend_stack.py y los Dockerfiles.
-# Los nombres de stacks y salidas son supuestos hasta que los escribamos.
-# ----------------------------------------------------------------------------
+# ------------------------------------------------------------------ Despliegue
 BACKEND_STACK  := ChicagoCrimeBackendStack
 FRONTEND_STACK := ChicagoCrimeFrontendStack
 
-.PHONY: deploy-backend deploy-frontend deploy-all destroy-all
-deploy-backend: ## Construye imágenes de las Lambdas y despliega API Gateway
+.PHONY: check-artifacts deploy-backend deploy-frontend-infra deploy-frontend \
+        deploy-all destroy-all site-url api-url
+
+check-artifacts: ## Verifica que existan los JSON del modelo (los usa la imagen predictiva)
+	@test -f ml/artifacts/forecast_types.json && test -f ml/artifacts/metrics_types.json \
+		|| (echo "Faltan artefactos: ejecuta 'make train'" && exit 1)
+
+deploy-backend: check-artifacts ## Construye imágenes de las Lambdas y despliega la API
 	$(CDK) deploy $(BACKEND_STACK)
+
+deploy-frontend-infra: ## Crea S3 + CloudFront (una vez, o si cambia el stack)
+	$(CDK) deploy $(FRONTEND_STACK)
 
 deploy-frontend: web-build ## Compila, sube a S3 e invalida CloudFront
 	@BUCKET=$$(aws cloudformation describe-stacks --stack-name $(FRONTEND_STACK) \
@@ -124,8 +133,22 @@ deploy-frontend: web-build ## Compila, sube a S3 e invalida CloudFront
 	aws s3 sync frontend/dist s3://$$BUCKET --delete; \
 	aws cloudfront create-invalidation --distribution-id $$DIST --paths "/*"
 
-deploy-all: ## Despliega todos los stacks
+deploy-all: check-artifacts ## Despliega todos los stacks (datos, backend, frontend infra)
 	$(CDK) deploy --all
 
 destroy-all: ## BORRA toda la infraestructura (pide confirmación)
 	$(CDK) destroy --all
+
+site-url: ## URL pública del dashboard
+	@aws cloudformation describe-stacks --stack-name $(FRONTEND_STACK) \
+		--query "Stacks[0].Outputs[?OutputKey=='SiteUrl'].OutputValue" --output text
+
+api-url: ## URL directa de la API (para depurar)
+	@aws cloudformation describe-stacks --stack-name $(BACKEND_STACK) \
+		--query "Stacks[0].Outputs[?OutputKey=='ApiUrl'].OutputValue" --output text
+
+# --------------------------------------------------------------- ML
+.PHONY: train
+
+train: ## Entrena el modelo de predicción
+	uv run python -m ml.train_types
