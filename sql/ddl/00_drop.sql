@@ -5,3 +5,4 @@ DROP TABLE IF EXISTS dim_time;
 DROP TABLE IF EXISTS dim_location;
 DROP TABLE IF EXISTS dim_crime_type;
 DROP TABLE IF EXISTS dim_location_description;
+DROP TABLE IF EXISTS ref_community_population;

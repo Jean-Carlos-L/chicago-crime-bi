@@ -31,11 +31,14 @@ CREATE TABLE dim_location (
 ) DISTSTYLE ALL;
 
 CREATE TABLE dim_crime_type (
-    crime_type_key INTEGER      NOT NULL,
-    iucr           VARCHAR(8)   NOT NULL,
-    primary_type   VARCHAR(64)  NOT NULL,
-    description    VARCHAR(128) NOT NULL,
-    fbi_code       VARCHAR(8)   NOT NULL,
+    crime_type_key  INTEGER      NOT NULL,
+    iucr            VARCHAR(8)   NOT NULL,
+    primary_type    VARCHAR(64)  NOT NULL,
+    description     VARCHAR(128) NOT NULL,
+    fbi_code        VARCHAR(8)   NOT NULL,
+    crime_group     VARCHAR(16)  NOT NULL,
+    is_property     BOOLEAN      NOT NULL,
+    weapon_involved BOOLEAN      NOT NULL,
     PRIMARY KEY (crime_type_key)
 ) DISTSTYLE ALL;
 
