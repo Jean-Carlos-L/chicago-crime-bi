@@ -1,0 +1,13 @@
+FROM public.ecr.aws/lambda/python:3.12
+COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
+
+WORKDIR /build
+COPY pyproject.toml uv.lock ./
+# backend-common (fastapi, mangum): la inferencia ya no se hace en línea
+RUN uv export --only-group backend-common --no-hashes --no-emit-project -o req.txt \
+   && uv pip install --system --no-cache -r req.txt
+
+COPY backend ${LAMBDA_TASK_ROOT}/backend
+COPY ml/artifacts/forecast_types.json ml/artifacts/metrics_types.json ${LAMBDA_TASK_ROOT}/ml/artifacts/
+
+CMD ["backend.app.predictive_main.handler"]
